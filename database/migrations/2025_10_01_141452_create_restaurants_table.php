@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('work_hours', 100)->nullable();
             $table->binary('img')->nullable();
             $table->float('rating')->default(0);
+            $table->timestamps();
         });
     }
 
