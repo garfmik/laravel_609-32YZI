@@ -11,6 +11,8 @@ class Restaurant extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'city', 'address'];
+
     public function reviews(): HasMany
     {
         return $this->hasMany(related: Review::class);

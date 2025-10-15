@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $restaurant->name }}</title>
+    <title>{{ $restaurant->name ?? 'Не найден' }}</title>
 </head>
 <body>
+@if ($restaurant)
     <h2>Ресторан:</h2>
     <table border="1">
         <thead>
-            <td>id</td>
-            <td>Наименование</td>
-            <td>Город</td>
+        <td>id</td>
+        <td>Наименование</td>
+        <td>Город</td>
         </thead>
         <tr>
             <td>{{ $restaurant->id }}</td>
@@ -21,19 +22,22 @@
     <h2>Отзывы:</h2>
     <table border="1">
         <thead>
-            <td>id</td>
-            <td>Комментарий</td>
-            <td>Рейтинг</td>
-            <td>Автор</td>
+        <td>id</td>
+        <td>Комментарий</td>
+        <td>Рейтинг</td>
+        <td>Автор</td>
         </thead>
-    @foreach ($restaurant->reviews as $review)
-        <tr>
-            <td>{{ $review->id }}</td>
-            <td>{{ $review->comment }}</td>
-            <td>{{ $review->rating }}</td>
-            <td>{{ $review->user->name }}</td>
-        </tr>
-    @endforeach
+        @foreach ($restaurant->reviews as $review)
+            <tr>
+                <td>{{ $review->id }}</td>
+                <td>{{ $review->comment }}</td>
+                <td>{{ $review->rating }}</td>
+                <td>{{ $review->user->name }}</td>
+            </tr>
+        @endforeach
     </table>
+@else
+    <p>Ресторан не найден.</p>
+@endif
 </body>
 </html>

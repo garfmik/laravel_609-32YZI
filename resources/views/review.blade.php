@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Отзыв #{{ $review->id }}</title>
+    <title>Отзыв #{{ $review->id ?? 'Не найден' }}</title>
 </head>
 <body>
+@if ($review)
     <h2>Отзыв:</h2>
     <table border="1">
         <thead>
-            <td>id</td>
-            <td>Комментарий</td>
-            <td>Рейтинг</td>
+        <td>id</td>
+        <td>Комментарий</td>
+        <td>Рейтинг</td>
         </thead>
         <tr>
             <td>{{ $review->id }}</td>
@@ -21,13 +22,16 @@
     <h2>Связанные данные:</h2>
     <table border="1">
         <thead>
-            <td>Ресторан</td>
-            <td>Автор</td>
+        <td>Ресторан</td>
+        <td>Автор</td>
         </thead>
         <tr>
             <td>{{ $review->restaurant->name }}</td>
             <td>{{ $review->user->name }}</td>
         </tr>
     </table>
+@else
+    <p>Отзыв не найден.</p>
+@endif
 </body>
 </html>
