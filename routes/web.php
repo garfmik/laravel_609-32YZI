@@ -16,7 +16,13 @@ Route::get('/restaurants', [RestaurantController::class, 'index']);
 Route::get('/restaurants/{id}', [RestaurantController::class, 'show']);
 Route::get('/restaurants/{id}/favorites', [RestaurantController::class, 'showFavorites']);
 
-Route::get('/reviews', [ReviewController::class, 'index']);
+Route::get('/restaurants/{restaurantId}/reviews', [ReviewController::class, 'index']);
 Route::get('/reviews/{id}', [ReviewController::class, 'show']);
+
+Route::post('/review', [ReviewController::class, 'store']);
+Route::get('/review/create', [ReviewController::class, 'create']);
+Route::get('/review/edit/{id}', [ReviewController::class, 'edit']);
+Route::post('/review/update/{id}', [ReviewController::class, 'update']);
+Route::get('/review/destroy/{id}', [ReviewController::class, 'destroy']);
 
 Route::get('/users/{id}', [UserController::class, 'show']);
