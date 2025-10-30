@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Restaurant;
 use App\Models\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
     public function index(string $restaurantId)
     {
-        $restaurant = \App\Models\Restaurant::findOrFail($restaurantId);
+        $restaurant = Restaurant::all()->where('id', $restaurantId)->first();
         return view('reviews', [
             'reviews' => $restaurant->reviews,
             'restaurant' => $restaurant
         ]);
     }
+
 
     public function show(string $id)
     {
@@ -23,22 +26,25 @@ class ReviewController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(string $restaurantId)
     {
+        $restaurant = Restaurant::all()->where('id', $restaurantId)->first();
+
         return view('review_create', [
-            'restaurants' => \App\Models\Restaurant::all(),
-            'users' => \App\Models\User::all()
+            'restaurant' => $restaurant
         ]);
     }
+
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'comment' => 'nullable|string|max:1000',
             'rating' => 'nullable|integer|min:1|max:5',
-            'restaurant_id' => 'required|exists:restaurants,id',
-            'user_id' => 'required|exists:users,id'
+            'restaurant_id' => 'required|exists:restaurants,id'
         ]);
+
+        $validated['user_id'] = 1;
 
         $review = new Review($validated);
         $review->save();
@@ -50,8 +56,8 @@ class ReviewController extends Controller
     {
         return view('review_edit', [
             'review' => Review::all()->where('id', $id)->first(),
-            'restaurants' => \App\Models\Restaurant::all(),
-            'users' => \App\Models\User::all()
+            'restaurants' => Restaurant::all(),
+            'users' => User::all()
         ]);
     }
 
@@ -61,8 +67,9 @@ class ReviewController extends Controller
             'comment' => 'nullable|string|max:1000',
             'rating' => 'nullable|integer|min:1|max:5',
             'restaurant_id' => 'required|exists:restaurants,id',
-            'user_id' => 'required|exists:users,id'
         ]);
+
+        $validated['user_id'] = 1;
 
         $review = Review::all()->where('id', $id)->first();
         $review->comment = $validated['comment'];
@@ -76,7 +83,9 @@ class ReviewController extends Controller
 
     public function destroy(string $id)
     {
+        $review = Review::where('id', $id)->first();
         Review::destroy($id);
-        return redirect()->to('/restaurants');
+        $restaurantId = $review->restaurant_id;
+        return redirect()->to("/restaurants/{$restaurantId}/reviews");
     }
 }

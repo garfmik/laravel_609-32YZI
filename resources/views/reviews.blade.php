@@ -25,6 +25,6 @@
         </tr>
     @endforeach
 </table>
-<a href="{{ url('review/create') }}">Добавить отзыв</a>
+<a href="{{ url('restaurants/' . $restaurant->id . '/reviews/create') }}">Добавить отзыв</a>
 </body>
 </html>

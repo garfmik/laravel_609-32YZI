@@ -37,41 +37,8 @@
         <tr>
             <td><label>Ресторан</label></td>
             <td>
-                <select name="restaurant_id">
-                    <option value="" style="display:none"></option>
-                    @foreach ($restaurants as $restaurant)
-                        <option value="{{ $restaurant->id }}"
-                                @if(old('restaurant_id'))
-                                    @if(old('restaurant_id') == $restaurant->id) selected @endif
-                                @else
-                                    @if($review->restaurant_id == $restaurant->id) selected @endif
-                            @endif>{{ $restaurant->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('restaurant_id')
-                <div class="is-invalid">{{ $message }}</div>
-                @enderror
-            </td>
-        </tr>
-        <tr>
-            <td><label>Автор</label></td>
-            <td>
-                <select name="user_id">
-                    <option value="" style="display:none"></option>
-                    @foreach ($users as $user)
-                        <option value="{{ $user->id }}"
-                                @if(old('user_id'))
-                                    @if(old('user_id') == $user->id) selected @endif
-                                @else
-                                    @if($review->user_id == $user->id) selected @endif
-                            @endif>{{ $user->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('user_id')
-                <div class="is-invalid">{{ $message }}</div>
-                @enderror
+                <div>{{ $review->restaurant->name }}</div>
+                <input type="hidden" name="restaurant_id" value="{{ $review->restaurant_id }}">
             </td>
         </tr>
     </table>
