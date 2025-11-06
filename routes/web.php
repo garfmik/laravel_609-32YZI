@@ -19,7 +19,7 @@ Route::get('/restaurants/{id}/favorites', [RestaurantController::class, 'showFav
 Route::get('/restaurants/{restaurantId}/reviews', [ReviewController::class, 'index']);
 Route::get('/reviews/{id}', [ReviewController::class, 'show']);
 
-Route::get('/restaurants/{restaurantId}/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
+Route::get('/restaurants/{restaurantId}/reviews/create', [ReviewController::class, 'create']);
 
 Route::post('/review', [ReviewController::class, 'store']);
 Route::get('/review/edit/{id}', [ReviewController::class, 'edit']);

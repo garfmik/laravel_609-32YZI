@@ -54,12 +54,15 @@ class ReviewController extends Controller
 
     public function edit(string $id)
     {
+        $review = Review::all()->where('id', $id)->first();
+        $restaurant = Restaurant::all()->where('id', $review->restaurant_id)->first();
+
         return view('review_edit', [
-            'review' => Review::all()->where('id', $id)->first(),
-            'restaurants' => Restaurant::all(),
-            'users' => User::all()
+            'review' => $review,
+            'restaurant' => $restaurant
         ]);
     }
+
 
     public function update(Request $request, string $id)
     {
@@ -84,8 +87,8 @@ class ReviewController extends Controller
     public function destroy(string $id)
     {
         $review = Review::where('id', $id)->first();
-        Review::destroy($id);
         $restaurantId = $review->restaurant_id;
+        Review::destroy($id);
         return redirect()->to("/restaurants/{$restaurantId}/reviews");
     }
 }
