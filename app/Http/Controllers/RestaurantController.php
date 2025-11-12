@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 
 class RestaurantController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('restaurants',
-            ['restaurants' => Restaurant::all()
-            ]);
+        $perpage = $request->perpage ?? 2;
+        $restaurants = Restaurant::paginate($perpage)->withQueryString();
+        return view('restaurants', [
+            'restaurants' => $restaurants
+        ]);
     }
 
     public function show(string $id)

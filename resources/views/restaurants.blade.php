@@ -12,13 +12,14 @@
             <td>Наименование</td>
             <td>Город</td>
         </thead>
-    @foreach ($restaurants as $restaurant)
-        <tr>
-            <td>{{ $restaurant->id }}</td>
-            <td>{{ $restaurant->name }}</td>
-            <td>{{ $restaurant->city }}</td>
-        </tr>
-    @endforeach
-</table>
+        @foreach ($restaurants as $restaurant)
+            <tr>
+                <td>{{ $restaurant->id }}</td>
+                <td>{{ $restaurant->name }}</td>
+                <td>{{ $restaurant->city }}</td>
+            </tr>
+      @endforeach
+    </table>
+    {{ $restaurants->links() }}
 </body>
 </html>
