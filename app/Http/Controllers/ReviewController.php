@@ -6,6 +6,8 @@ use App\Models\Restaurant;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ReviewController extends Controller
 {
@@ -44,7 +46,7 @@ class ReviewController extends Controller
             'restaurant_id' => 'required|exists:restaurants,id'
         ]);
 
-        $validated['user_id'] = 1;
+        $validated['user_id'] = Auth::id();
 
         $review = new Review($validated);
         $review->save();
@@ -56,6 +58,13 @@ class ReviewController extends Controller
     {
         $review = Review::all()->where('id', $id)->first();
         $restaurant = Restaurant::all()->where('id', $review->restaurant_id)->first();
+
+        if (!Gate::allows('edit-review', $review)) {
+            return redirect('/error')->with([
+                'message' => 'У вас нет прав для редактирования этого отзыва.',
+                'restaurant_id' => $review->restaurant_id
+            ]);
+        }
 
         return view('review_edit', [
             'review' => $review,
@@ -72,7 +81,7 @@ class ReviewController extends Controller
             'restaurant_id' => 'required|exists:restaurants,id',
         ]);
 
-        $validated['user_id'] = 1;
+        $validated['user_id'] = Auth::id();
 
         $review = Review::all()->where('id', $id)->first();
         $review->comment = $validated['comment'];
@@ -88,6 +97,12 @@ class ReviewController extends Controller
     {
         $review = Review::where('id', $id)->first();
         $restaurantId = $review->restaurant_id;
+        if (!Gate::allows('destroy-review', $review)) {
+            return redirect('/error')->with([
+                'message' => 'У вас нет разрешения на удаление отзыва',
+                'restaurant_id' => $review->restaurant_id
+            ]);
+        }
         Review::destroy($id);
         return redirect()->to("/restaurants/{$restaurantId}/reviews");
     }
