@@ -1,49 +1,24 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Редактирование отзыва #{{ $review->id }}</title>
-    <style>
-        .is-invalid { color: red; }
-        .form-table { width: 100%; max-width: 600px; border-collapse: collapse; }
-        .form-table td { padding: 10px; vertical-align: top; }
-        .form-table label { display: block; margin-bottom: 5px; }
-        textarea, select, input[type="number"] { width: 100%; box-sizing: border-box; }
-    </style>
-</head>
-<body>
-<h2>Редактирование отзыва</h2>
-<form method="post" action="{{ url('review/update', $review->id) }}">
-    @csrf
-    <table class="form-table">
-        <tr>
-            <td><label>Комментарий</label></td>
-            <td>
-                <textarea name="comment" rows="4">@if(old('comment')) {{ old('comment') }} @else {{ $review->comment }} @endif</textarea>
-                @error('comment')
-                <div class="is-invalid">{{ $message }}</div>
-                @enderror
-            </td>
-        </tr>
-        <tr>
-            <td><label>Рейтинг</label></td>
-            <td>
-                <input type="number" name="rating" value="@if(old('rating')) {{ old('rating') }} @else {{ $review->rating }} @endif" min="1" max="5">
-                @error('rating')
-                <div class="is-invalid">{{ $message }}</div>
-                @enderror
-            </td>
-        </tr>
-        <tr>
-            <td><label>Ресторан</label></td>
-            <td>
-                <div>{{ $review->restaurant->name }}</div>
-                <input type="hidden" name="restaurant_id" value="{{ $review->restaurant_id }}">
-            </td>
-        </tr>
-    </table>
-    <br>
-    <input type="submit" style="margin-top: 10px;">
-</form>
-</body>
-</html>
+@extends('layout')
+@section('title','Редактирование отзыва')
+@section('content')
+    <h2>Редактирование отзыва #{{ $review->id }}</h2>
+
+    <form method="post" action="{{ url('review/update', $review->id) }}">
+        @csrf
+        <div class="mb-3">
+            <label class="form-label">Комментарий</label>
+            <textarea name="comment" class="form-control @error('comment') is-invalid @enderror" rows="4">{{ old('comment', $review->comment) }}</textarea>
+            @error('comment')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Рейтинг</label>
+            <input type="number" name="rating" min="1" max="5" class="form-control @error('rating') is-invalid @enderror" value="{{ old('rating', $review->rating) }}">
+            @error('rating')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
+        <input type="hidden" name="restaurant_id" value="{{ $review->restaurant_id }}">
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <a class="btn btn-secondary" href="{{ url('restaurants/'.$review->restaurant_id.'/reviews') }}">Отмена</a>
+    </form>
+@endsection

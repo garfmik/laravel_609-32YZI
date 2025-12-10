@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function show(string $id)
+    public function profile()
     {
-        return view('user', [
-            'user' => User::all()->where('id', $id)->first()
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect('/login')->with('error', 'Сначала войдите в систему');
+        }
+
+        return view('profile', [
+            'user' => $user,
+            'reviews' => $user->reviews()->with('restaurant')->get(),
+            'favorites' => $user->restaurants
         ]);
     }
 }

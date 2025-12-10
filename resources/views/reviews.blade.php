@@ -1,30 +1,28 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Отзывы для {{ $restaurant->name }}</title>
-</head>
-<body>
-<h2>Список отзывов для {{ $restaurant->name }}</h2>
-<table border="1">
-    <thead>
-    <td>id</td>
-    <td>Комментарий</td>
-    <td>Рейтинг</td>
-    <td>Действия</td>
-    </thead>
-    @foreach ($reviews as $review)
-        <tr>
-            <td>{{ $review->id }}</td>
-            <td>{{ $review->comment }}</td>
-            <td>{{ $review->rating }}</td>
-            <td>
-                <a href="{{ url('review/edit', $review->id) }}">Редактировать</a>
-                <a href="{{ url('review/destroy', $review->id) }}">Удалить</a>
-            </td>
-        </tr>
-    @endforeach
-</table>
-<a href="{{ url('restaurants/' . $restaurant->id . '/reviews/create') }}">Добавить отзыв</a>
-</body>
-</html>
+@extends('layout')
+@section('title','Отзывы')
+@section('content')
+    <h2>Отзывы для {{ $restaurant->name }}</h2>
+
+    <table class="table table-bordered">
+        <thead><tr><th>id</th><th>Комментарий</th><th>Рейтинг</th><th>Действия</th></tr></thead>
+        <tbody>
+        @foreach ($reviews as $review)
+            <tr>
+                <td>{{ $review->id }}</td>
+                <td>{{ $review->comment }}</td>
+                <td>{{ $review->rating }}</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="{{ url('review/edit', $review->id) }}">Редактировать</a>
+
+                    <form style="display:inline-block" method="post" action="{{ url('review/destroy', $review->id) }}">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Удалить отзыв?')">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" href="{{ url('restaurants/' . $restaurant->id . '/reviews/create') }}">Добавить отзыв</a>
+@endsection

@@ -51,7 +51,7 @@ class ReviewController extends Controller
         $review = new Review($validated);
         $review->save();
 
-        return redirect()->to('/restaurants/' . $validated['restaurant_id'] . '/reviews');
+        return redirect()->to('/restaurants/' . $validated['restaurant_id']);
     }
 
     public function edit(string $id)
@@ -90,7 +90,7 @@ class ReviewController extends Controller
         $review->user_id = $validated['user_id'];
         $review->save();
 
-        return redirect()->to('/restaurants/' . $review->restaurant_id . '/reviews');
+        return redirect()->to('/profile')->with('success', 'Отзыв успешно обновлён!');
     }
 
     public function destroy(string $id)
@@ -104,6 +104,6 @@ class ReviewController extends Controller
             ]);
         }
         Review::destroy($id);
-        return redirect()->to("/restaurants/{$restaurantId}/reviews");
+        return redirect()->to('/profile')->with('success', 'Отзыв успешно удалён!');
     }
 }

@@ -1,25 +1,30 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Список ресторанов</title>
-</head>
-<body>
+@extends('layout')
+@section('title','Список ресторанов')
+@section('content')
     <h2>Список ресторанов:</h2>
-    <table border="1">
+
+    <table class="table table-bordered">
         <thead>
-            <td>id</td>
-            <td>Наименование</td>
-            <td>Город</td>
+        <tr>
+            <th>Наименование</th>
+            <th>Город</th>
+            <th>Адрес</th>
+        </tr>
         </thead>
+        <tbody>
         @foreach ($restaurants as $restaurant)
             <tr>
-                <td>{{ $restaurant->id }}</td>
-                <td>{{ $restaurant->name }}</td>
+                <td>
+                    <a href="{{ url('restaurants/'.$restaurant->id) }}" class="restaurant-link">
+                        {{ $restaurant->name }}
+                    </a>
+                </td>
                 <td>{{ $restaurant->city }}</td>
+                <td>{{ $restaurant->address }}</td>
             </tr>
-      @endforeach
+        @endforeach
+        </tbody>
     </table>
+
     {{ $restaurants->links() }}
-</body>
-</html>
+@endsection
