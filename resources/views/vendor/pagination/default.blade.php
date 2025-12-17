@@ -36,6 +36,7 @@
         {{-- Форма выбора элементов на странице, справа --}}
         <div class="d-flex justify-content-end">
             <form method="get" action="{{ url('restaurants') }}" class="per-page-form">
+
                 <span>Элементов на странице:</span>
                 <select name="perpage">
                     <option value="2" @if($paginator->perPage() == 2) selected @endif>2</option>

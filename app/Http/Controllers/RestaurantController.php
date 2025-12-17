@@ -10,12 +10,39 @@ class RestaurantController extends Controller
 {
     public function index(Request $request)
     {
-        $perpage = $request->perpage ?? 2;
-        $restaurants = Restaurant::paginate($perpage)->withQueryString();
-        return view('restaurants', [
-            'restaurants' => $restaurants
-        ]);
+        $perpage = $request->get('perpage', 2);
+
+        $query = Restaurant::query();
+
+        // Поиск по названию
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Фильтр по городу
+        if ($request->filled('city')) {
+            $query->where('city', $request->city);
+        }
+
+        // Фильтр по кухне
+        if ($request->filled('cuisine')) {
+            $query->where('cuisine', $request->cuisine);
+        }
+
+        // Фильтр по рейтингу
+        if ($request->filled('rating')) {
+            $query->where('rating', '>=', $request->rating);
+        }
+
+        $restaurants = $query->paginate($perpage)->withQueryString();
+
+        $cities = Restaurant::select('city')->distinct()->pluck('city');
+        $cuisines = Restaurant::whereNotNull('cuisine')->select('cuisine')->distinct()->pluck('cuisine');
+
+        return view('restaurants', compact('restaurants', 'cities', 'cuisines'));
     }
+
+
 
     public function show(string $id)
     {
